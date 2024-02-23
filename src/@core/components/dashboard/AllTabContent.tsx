@@ -1,5 +1,6 @@
 import { FC } from "react";
 import StatisticsCard from "./StatisticsCard";
+import BarChartComponent from "./LineGraph";
 
 type AllTabContentType = {};
 
@@ -40,22 +41,25 @@ const AllTabContent: FC<AllTabContentType> = () => {
   ];
 
   return (
-    <div className="mt-4">
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {statisticsData?.map((item) => {
-          return (
-            <StatisticsCard
-              key={item?.id}
-              title={item?.title}
-              icon={item?.icon}
-              statistics={item?.statistics}
-              statisticsStartValue={item.statisticsStartValue}
-              description={item?.description}
-            />
-          );
-        })}
+    <>
+      <div className="mt-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {statisticsData?.map((item) => {
+            return (
+              <StatisticsCard
+                key={item?.id}
+                title={item?.title}
+                icon={item?.icon}
+                statistics={item?.statistics}
+                statisticsStartValue={item.statisticsStartValue}
+                description={item?.description}
+              />
+            );
+          })}
+        </div>
       </div>
-    </div>
+      <BarChartComponent />
+    </>
   );
 };
 

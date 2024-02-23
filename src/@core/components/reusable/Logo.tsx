@@ -5,8 +5,8 @@ type LogoTypes = {};
 
 const Logo: FC<LogoTypes> = () => {
   return (
-    <Link href="/" className="font-bold">
-      АДМИН ПАНЕЛЬ
+    <Link href="/" className="font-bold text-xl">
+      Админ панель | 1009
     </Link>
   );
 };

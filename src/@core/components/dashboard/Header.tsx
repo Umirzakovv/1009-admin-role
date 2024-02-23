@@ -10,7 +10,7 @@ const Header: FC<HeaderTypes> = () => {
     <div className="flex items-center justify-between mb-4">
       <PageTitle title="Дашбоард" />
       <div className="flex items-center space-x-2" >
-        <p>Получить данные: </p>
+        <p className="text-sm">Получить данные: </p>
         <CalendarPopover />
         <SelectPopover />
       </div>

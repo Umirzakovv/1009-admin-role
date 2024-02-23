@@ -21,7 +21,7 @@ const StatisticsCard: FC<StatisticsCardTypes> = ({
     <div className="border p-[24px] rounded-xl shadow">
       <div className="flex items-center justify-between">
         <p className="text-sm font-medium mb-[8px]">{title}</p>
-        <Image src={icon} alt="dollar icon" width={16} height={16} />
+        <Image src={icon} alt="card icon" width={16} height={16} />
       </div>
       <h4 className="text-2xl font-bold ">
         {statisticsStartValue}
