@@ -1,7 +1,7 @@
 "use client";
 
 import Header from "@/@core/components/control-employees/Header";
-import TableEmployees from "@/@core/components/control-employees/Table";
+import TableEmployees from "@/@core/components/control-employees/TableEmployees";
 // import { TableData } from "@/@core/components/control-employees/tableDataModel";
 import Container from "@/@core/components/reusable/Container";
 import EmployeeProvider from "@/@core/context/employee";

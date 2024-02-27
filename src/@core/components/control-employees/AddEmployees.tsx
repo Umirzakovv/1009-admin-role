@@ -1,6 +1,6 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useState } from "react";
 
 import {
   Dialog,
@@ -24,6 +24,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 const AddEmployees: FC = () => {
+  const [isUserNameUnique, setIsUserNameUnique] = useState<boolean>(false);
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const url = `https://1009.api.ccenter.uz/api/v1/Auth/addControlUser/search?username=${e?.target?.value}`;
+    console.log(url);
+
+    try {
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error(`Ошибка при получение данных ${res?.status}`);
+      }
+      const data = await res.json();
+      setIsUserNameUnique(data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+    }
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -54,14 +72,21 @@ const AddEmployees: FC = () => {
           <Input type="text" placeholder="Ф.И.О" />
           <Input
             type="text"
-            placeholder="Никнейм (уникальное)"
-            autoComplete="off"
+            placeholder="Никнейм (уникальное)" // value={userName}
+            onChange={handleChange}
           />
+          {isUserNameUnique ? (
+            <p className="text-red-500 text-xs">Такой никнейм уже занят</p>
+          ) : (
+            ""
+          )}
           <Input type="password" placeholder="Пароль" />
         </div>
 
         <DialogFooter>
-          <Button type="submit">Добавить</Button>
+          <Button type="submit" disabled={isUserNameUnique}>
+            Добавить
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

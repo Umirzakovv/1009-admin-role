@@ -49,7 +49,6 @@ const TableEmployees: FC = () => {
       {isLoading && <div>Loading... </div>}
       {tableData.length ? (
         <Table className="border">
-          <TableCaption>Список соотрудников</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead>№</TableHead>
