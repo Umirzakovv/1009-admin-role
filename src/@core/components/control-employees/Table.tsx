@@ -1,40 +1,95 @@
+"use client";
+
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+import { FC, useContext, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import DeleteAlert from "./DeleteAlert";
+import { EmployeeContext } from "@/@core/context/employee";
+import { ITableData } from "./tableDataModel";
 
-const Table = () => {
+// interface Props {
+//   data: TableData[];
+//   setData: React.Dispatch<React.SetStateAction<TableData[]>>;
+// }
 
-    
+const TableEmployees: FC = () => {
+  const url =
+    "https://1009.api.ccenter.uz/api/v1/Auth/addControlUser/all?role=null";
+
+  const [isLoading, setisLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const { tableData, setTableData } = useContext(EmployeeContext);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setisLoading(true);
+
+      try {
+        const response = await fetch(url);
+        if (!response?.ok) {
+          throw new Error(`Ошибка при получение данных ${response?.status}`);
+        }
+        const data = await response.json();
+        console.log(data);
+
+        setTableData(data);
+      } catch (err) {
+        console.log("Ошибка при получения данных " + err);
+      } finally {
+        setisLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
-    <table className="border w-full text-center text-sm">
-      <thead>
-        <tr>
-          <td className="font-bold border p-2">№</td>
-          <td className="font-bold border">Ф.И.О</td>
-          <td className="font-bold border">Роль</td>
-          <td className="font-bold border">Никнейм</td>
-          <td className="font-bold border">Пароль</td>
-          <td className="font-bold border">Управление</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td className="border p-2">1</td>
-          <td className="border">Умирзаков Мухаммадёсин</td>
-          <td className="border">Оператор</td>
-          <td className="border">umirzakov</td>
-          <td className="border">3848595</td>
-          <td>
-            <Button variant="outline" className="p-0 h-max p-1" >
-              <Image src="/pen.svg" alt="edit img" width={15} height={15} />
-            </Button>
-            <DeleteAlert />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div>
+      {isLoading && <div>Loading... </div>}
+      {tableData && (
+        <Table className="border">
+          <TableCaption>Список соотрудников</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead>№</TableHead>
+              <TableHead>ФИО</TableHead>
+              <TableHead>Роль</TableHead>
+              <TableHead>Никнейм</TableHead>
+              <TableHead>Пароль</TableHead>
+
+              <TableHead>Управление</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {tableData?.map((item: ITableData, index: number) => {
+              return (
+                <TableRow key={item?.id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{item?.full_name}</TableCell>
+                  <TableCell>{item?.role}</TableCell>
+                  <TableCell>{item?.username}</TableCell>
+                  <TableCell>{item?.password}</TableCell>
+
+                  <TableCell>
+                    <Button variant="outline">-</Button>
+                    <Button variant="outline">+</Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      )}
+    </div>
   );
 };
 
-export default Table;
+export default TableEmployees;

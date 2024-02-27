@@ -1,16 +1,22 @@
+"use client";
+
 import Header from "@/@core/components/control-employees/Header";
-import Table from "@/@core/components/control-employees/Table";
+import TableEmployees from "@/@core/components/control-employees/Table";
+// import { TableData } from "@/@core/components/control-employees/tableDataModel";
 import Container from "@/@core/components/reusable/Container";
-import React from "react";
+import EmployeeProvider from "@/@core/context/employee";
+import React, { useContext, useState } from "react";
 
 const ControlEmployees = () => {
   return (
-    <div>
-      <Container>
-        <Header />
-        <Table />
-      </Container>
-    </div>
+    <EmployeeProvider>
+      <div>
+        <Container>
+          <Header />
+          <TableEmployees />
+        </Container>
+      </div>
+    </EmployeeProvider>
   );
 };
 

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -7,9 +7,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-type SortEmployeesTypes = {};
 
-const SortEmployees: FC<SortEmployeesTypes> = () => {
+
+const SortEmployees: FC = () => {
+
   return (
     <Select>
       <SelectTrigger className="w-[180px]">

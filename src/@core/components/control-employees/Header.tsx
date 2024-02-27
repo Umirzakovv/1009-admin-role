@@ -1,12 +1,12 @@
-import { FC } from "react";
+import { FC, useContext, useState } from "react";
 import PageTitle from "../reusable/PageTitle";
 import SortEmployees from "./SortEmployees";
-import { Button } from "@/components/ui/button";
 import AddEmployees from "./AddEmployees";
+import { EmployeeContext } from "@/@core/context/employee";
 
-type HeaderTypes = {};
+const Header: FC = () => {
+  
 
-const Header: FC<HeaderTypes> = () => {
   return (
     <div className="flex items-center justify-between p-4">
       <PageTitle title="Управление сотрудниками" />
