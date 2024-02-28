@@ -4,8 +4,6 @@ import Link from "next/link";
 import { FC } from "react";
 import { usePathname } from "next/navigation";
 
-type NavbarTypes = {};
-
 const navLinks = [
   {
     id: 1,
@@ -29,7 +27,7 @@ const navLinks = [
   },
 ];
 
-const Navbar: FC<NavbarTypes> = () => {
+const Navbar: FC = () => {
   const pathname = usePathname();
 
   return (
