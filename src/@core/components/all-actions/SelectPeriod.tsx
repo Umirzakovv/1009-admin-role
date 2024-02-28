@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { FC, useState } from "react";
+import React, { FC, useState } from "react";
 import {
   Popover,
   PopoverContent,
@@ -8,33 +8,32 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 
-const CalendarPopover: FC = () => {
+const SelectPeriod: FC = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [date2, setDate2] = useState<Date | undefined>(new Date());
-
+  console.log(date, date2);
+  
   return (
     <Popover>
       <PopoverTrigger>
-        <div className="border rounded-md p-2">
-          <p className="text-sm">с 12.12.2023 до 12.12.2024</p>
-        </div>
+        <p className="rounded-md text-sm font-medium border h-10 px-4 py-2">С 12.12.2023 до 12.01.2024</p>
       </PopoverTrigger>
-      <PopoverContent className="flex w-max">
-        <Calendar
+      <PopoverContent className="w-max flex p-0 m-0">
+        <Calendar 
           mode="single"
           selected={date}
           onSelect={setDate}
-          className="rounded-md border"
+          className="rounded-md border shadow"
         />
         <Calendar
           mode="single"
           selected={date2}
           onSelect={setDate2}
-          className="rounded-md border"
+          className="rounded-md border shadow"
         />
       </PopoverContent>
     </Popover>
   );
 };
 
-export default CalendarPopover;
+export default SelectPeriod;

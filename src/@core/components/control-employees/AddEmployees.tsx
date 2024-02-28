@@ -63,7 +63,6 @@ const AddEmployees: FC = () => {
 
   const handleFormSubmit = async () => {
     const url = "https://1009.api.ccenter.uz/api/v1/Auth/addControlUser";
-    console.log(body);
 
     try {
       const response = await fetch(url, {
