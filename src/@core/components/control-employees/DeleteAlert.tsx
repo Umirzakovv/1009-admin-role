@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useContext, useState } from "react";
 
 import {
   AlertDialog,
@@ -13,8 +13,36 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { getEmployees } from "@/@core/utils/getRequestTableData";
+import { EmployeeContext } from "@/@core/context/employee";
 
-const DeleteAlert: FC = () => {
+interface Props {
+  id: string;
+}
+
+const DeleteAlert: FC<Props> = ({ id }) => {
+  const url = `https://1009.api.ccenter.uz/api/v1/Auth/deleteControlUser/${id}`;
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { setTableData } = useContext(EmployeeContext);
+
+  const handleDeleteClick = async () => {
+    console.log(id);
+
+    try {
+      const response = await fetch(url, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to delete data: ${response.statusText}`);
+      }
+      getEmployees(setTableData, setIsLoading);
+    } catch (err) {
+      console.log(err);
+    } finally {
+    }
+  };
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -34,7 +62,7 @@ const DeleteAlert: FC = () => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Отмена</AlertDialogCancel>
-          <AlertDialogAction>Да</AlertDialogAction>
+          <AlertDialogAction onClick={handleDeleteClick}>Да</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -15,6 +15,8 @@ import { Button } from "@/components/ui/button";
 import { EmployeeContext } from "@/@core/context/employee";
 import { ITableData } from "./tableDataModel";
 import NotFound from "../reusable/NotFound";
+import { getEmployees } from "@/@core/utils/getRequestTableData";
+import DeleteAlert from "./DeleteAlert";
 
 const TableEmployees: FC = () => {
   const url =
@@ -25,28 +27,28 @@ const TableEmployees: FC = () => {
   const { tableData, setTableData } = useContext(EmployeeContext);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(url);
-        if (!response?.ok) {
-          throw new Error(`Ошибка при получение данных ${response?.status}`);
-        }
-        const data = await response.json();
-        setTableData(data);
-      } catch (err) {
-        console.log("Ошибка при получения данных " + err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    // const fetchData = async () => {
+    //   setIsLoading(true);
+    //   try {
+    //     const response = await fetch(url);
+    //     if (!response?.ok) {
+    //       throw new Error(`Ошибка при получение данных ${response?.status}`);
+    //     }
+    //     const data = await response.json();
+    //     setTableData(data);
+    //   } catch (err) {
+    //     console.log("Ошибка при получения данных " + err);
+    //   } finally {
+    //     setIsLoading(false);
+    //   }
+    // };
 
-    fetchData();
+    getEmployees(setTableData, setIsLoading);
   }, []);
 
   return (
     <div>
-      {isLoading && <div>Loading... </div>}
+      {isLoading && <div>Загрузка... </div>}
       {tableData.length ? (
         <Table className="border">
           <TableHeader>
@@ -71,8 +73,8 @@ const TableEmployees: FC = () => {
                   <TableCell>{item?.password}</TableCell>
 
                   <TableCell>
-                    <Button variant="outline">-</Button>
                     <Button variant="outline">+</Button>
+                    <DeleteAlert id={item?.id}/>
                   </TableCell>
                 </TableRow>
               );
