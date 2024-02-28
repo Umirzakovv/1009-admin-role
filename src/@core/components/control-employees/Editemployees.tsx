@@ -1,7 +1,4 @@
-"use client";
-
-import { FC, useContext, useRef, useState } from "react";
-
+import { FC, useContext, useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -20,21 +17,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { getEmployees } from "@/@core/utils/getRequestTableData";
+import Image from "next/image";
+import { ITableData } from "./tableDataModel";
 import { EmployeeContext } from "@/@core/context/employee";
+import { getEmployees } from "@/@core/utils/getRequestTableData";
 
-const AddEmployees: FC = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isUserNameUnique, setIsUserNameUnique] = useState<boolean>(false);
+interface Props {
+  item: ITableData;
+}
+
+const EditEmployees: FC<Props> = ({ item }) => {
   const { setTableData } = useContext(EmployeeContext);
 
-  const [role, setRole] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
-  const [fullName, setFullName] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [id, setId] = useState<string>(item?.id);
+  const [role, setRole] = useState<string>(item?.role);
+  const [username, setUsername] = useState<string>(item?.username);
+  const [fullName, setFullName] = useState<string>(item?.full_name);
+  const [password, setPassword] = useState<string>(item?.password);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const body = {
     full_name: fullName,
@@ -43,31 +45,12 @@ const AddEmployees: FC = () => {
     password: password,
   };
 
-  const handleCheckUniquenessChange = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const url = `https://1009.api.ccenter.uz/api/v1/Auth/addControlUser/search?username=${e?.target?.value}`;
-    setUsername(e?.target?.value);
-    try {
-      const res = await fetch(url);
-      if (!res.ok) {
-        throw new Error(`Ошибка при получение данных ${res?.status}`);
-      }
-      const data = await res.json();
-      setIsUserNameUnique(data);
-    } catch (err) {
-      console.log(err);
-    } finally {
-    }
-  };
-
-  const handleFormSubmit = async () => {
-    const url = "https://1009.api.ccenter.uz/api/v1/Auth/addControlUser";
-    console.log(body);
+  const handleEditClick = async () => {
+    const url = `https://1009.api.ccenter.uz/api/v1/Auth/updateControlUser/${id}`;
 
     try {
       const response = await fetch(url, {
-        method: "POST",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
@@ -75,7 +58,9 @@ const AddEmployees: FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`Ошибка при получение данных: ${response.statusText}`);
+        throw new Error(
+          `Произошла ошибка в процессе изменений: ${response.statusText}`
+        );
       }
       getEmployees(setTableData, setIsLoading);
     } catch (err) {
@@ -87,7 +72,9 @@ const AddEmployees: FC = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Добавить соотрудника</Button>
+        <Button variant="outline" className="p-0 h-max p-1">
+          <Image src="/pen.svg" alt="edit img" width={15} height={15} />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -98,7 +85,7 @@ const AddEmployees: FC = () => {
         </DialogHeader>
 
         <div className="grid gap-5">
-          <Select onValueChange={(e) => setRole(e)}>
+          <Select onValueChange={(e) => setRole(e)} defaultValue={role}>
             <SelectTrigger>
               <SelectValue placeholder="Выберите роль" />
             </SelectTrigger>
@@ -110,33 +97,27 @@ const AddEmployees: FC = () => {
           <Input
             type="text"
             placeholder="Ф.И.О"
+            value={fullName}
             onChange={(e) => setFullName(e.target.value)}
           />
           <Input
             type="text"
             placeholder="Никнейм (уникальное)"
-            onChange={(e) => handleCheckUniquenessChange(e)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
-          {isUserNameUnique ? (
-            <p className="text-red-500 text-xs">Такой никнейм уже занят</p>
-          ) : (
-            ""
-          )}
           <Input
             type="password"
             placeholder="Пароль"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
 
         <DialogFooter>
           <DialogClose>
-            <Button
-              type="submit"
-              disabled={isUserNameUnique}
-              onClick={handleFormSubmit}
-            >
-              {!isLoading ? "Добавить" : "Загрузка"}
+            <Button type="submit" onClick={handleEditClick}>
+              Изменить
             </Button>
           </DialogClose>
         </DialogFooter>
@@ -145,4 +126,4 @@ const AddEmployees: FC = () => {
   );
 };
 
-export default AddEmployees;
+export default EditEmployees;

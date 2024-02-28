@@ -14,9 +14,9 @@ import { FC, useContext, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { EmployeeContext } from "@/@core/context/employee";
 import { ITableData } from "./tableDataModel";
-import NotFound from "../reusable/NotFound";
 import { getEmployees } from "@/@core/utils/getRequestTableData";
 import DeleteAlert from "./DeleteAlert";
+import EditEmployees from "./Editemployees";
 
 const TableEmployees: FC = () => {
   const url =
@@ -27,22 +27,6 @@ const TableEmployees: FC = () => {
   const { tableData, setTableData } = useContext(EmployeeContext);
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   setIsLoading(true);
-    //   try {
-    //     const response = await fetch(url);
-    //     if (!response?.ok) {
-    //       throw new Error(`Ошибка при получение данных ${response?.status}`);
-    //     }
-    //     const data = await response.json();
-    //     setTableData(data);
-    //   } catch (err) {
-    //     console.log("Ошибка при получения данных " + err);
-    //   } finally {
-    //     setIsLoading(false);
-    //   }
-    // };
-
     getEmployees(setTableData, setIsLoading);
   }, []);
 
@@ -73,17 +57,16 @@ const TableEmployees: FC = () => {
                   <TableCell>{item?.password}</TableCell>
 
                   <TableCell>
-                    <Button variant="outline">+</Button>
-                    <DeleteAlert id={item?.id}/>
+                    <EditEmployees item={item} />
+                    <DeleteAlert id={item?.id} />
                   </TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
-      ) : (
-        <NotFound />
-      )}
+      ) : // <NotFound />
+      null}
     </div>
   );
 };
